@@ -209,7 +209,7 @@ type ApiPostMethods = 'POST' | 'PUT' | 'DELETE'
 
 ## Установка и запуск
 Для установки и запуска проекта необходимо выполнить команды
-
+```
 ```
 npm install
 npm run start
