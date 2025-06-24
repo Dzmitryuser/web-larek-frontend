@@ -1,10 +1,11 @@
-export interface IProductItem {
+export interface IGoodsItem {
 	id: string;
 	description: string;
-	image: string;
 	title: string;
 	category: string;
 	price: number | null;
+	image: string;
+	
 }
 
 export interface IActions {
@@ -13,23 +14,25 @@ export interface IActions {
 
 export interface IOrderForm {
 	payment?: string;
-	address?: string;
-	phone?: string;
 	email?: string;
 	total?: string | number;
+	address?: string;
+	phone?: string;
+	
 }
 
 export interface IOrder extends IOrderForm {
 	items: string[];
 }
 
-export interface IOrderLot {
+export interface IOrderedLot {
 	payment: string;
 	email: string;
-	phone: string;
 	address: string;
 	total: number;
 	items: string[];
+	phone: string;
+	
 }
 
 export interface IOrderResult {
