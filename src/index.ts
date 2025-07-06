@@ -2,20 +2,20 @@ import './scss/styles.scss';
 
 import { CDN_URL, API_URL } from './utils/constants';
 import { EventEmitter } from './components/base/events';
-import { ApiModel } from './components/Model/ApiModel';
-import { DataModel } from './components/Model/DataModel';
-import { Card } from './components/View/Card';
-import { CardPreview } from './components/View/CardPreview';
-import { IOrderForm, IProductItem } from './types';
-import { Modal } from './components/View/Modal';
+import { ApiModel } from './components/ModelApi';
+import { DataModel } from './components/ModelData';
+import { Card } from './components/ViewCard';
+import { CardPreview } from './components/ViewCardPreview';
+import { IOrderForm, IGoodsItem } from './types';
+import { Modal } from './components/ViewModal';
 import { ensureElement } from './utils/utils';
-import { BasketModel } from './components/Model/BasketModel';
-import { Basket } from './components/View/Basket';
-import { BasketItem } from './components/View/BasketItem';
-import { FormModel } from './components/Model/FormModel';
-import { Order } from './components/View/FormOrder';
-import { Contacts } from './components/View/FormContacts';
-import { Success } from './components/View/Success';
+import { CartModel } from './components/ModelCart';
+import { Cart } from './components/ViewCart';
+import { CartItem } from './components/ViewCartItem';
+import { FormModel } from './components/ModelForm';
+import { Order } from './components/ViewFormOrder';
+import { Contacts } from './components/ViewFormContacts';
+import { Success } from './components/ViewSuccess';
 
 const cardCatalogTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
 const cardPreviewTemplate = document.querySelector('#card-preview') as HTMLTemplateElement;
@@ -29,8 +29,8 @@ const apiModel = new ApiModel(CDN_URL, API_URL);
 const events = new EventEmitter();
 const dataModel = new DataModel(events);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
-const basket = new Basket(basketTemplate, events);
-const basketModel = new BasketModel();
+const basket = new Cart(basketTemplate, events);
+const basketModel = new CartModel();
 const formModel = new FormModel(events);
 const order = new Order(orderTemplate, events);
 const contacts = new Contacts(contactsTemplate, events);
@@ -43,11 +43,11 @@ events.on('productCards:receive', () => {
   });
 });
 
-/* Получить объект данных "IProductItem" карточки по которой кликнули */
-events.on('card:select', (item: IProductItem) => { dataModel.setPreview(item) });
+/* Получить объект данных "IGoodsItem" карточки по которой кликнули */
+events.on('card:select', (item: IGoodsItem) => { dataModel.setPreview(item) });
 
 /** Открываем модальное окно карточки товара */
-events.on('modalCard:open', (item: IProductItem) => {
+events.on('modalCard:open', (item: IGoodsItem) => {
   const cardPreview = new CardPreview(cardPreviewTemplate, events)
   modal.content = cardPreview.render(item);
   modal.render();
@@ -65,7 +65,7 @@ events.on('basket:open', () => {
   basket.renderSumAllProducts(basketModel.getSumAllProducts());  // отобразить сумма всех продуктов в корзине
   let i = 0;
   basket.items = basketModel.basketProducts.map((item) => {
-    const basketItem = new BasketItem(cardBasketTemplate, events, { onClick: () => events.emit('basket:basketItemRemove', item) });
+    const basketItem = new CartItem(cardBasketTemplate, events, { onClick: () => events.emit('basket:basketItemRemove', item) });
     i = i + 1;
     return basketItem.render(item, i);
   })
@@ -74,13 +74,13 @@ events.on('basket:open', () => {
 });
 
 /* Удаление карточки товара из корзины */
-events.on('basket:basketItemRemove', (item: IProductItem) => {
+events.on('basket:basketItemRemove', (item: IGoodsItem) => {
   basketModel.deleteCardToBasket(item);
   basket.renderHeaderBasketCounter(basketModel.getCounter()); // отобразить количество товара на иконке корзины
   basket.renderSumAllProducts(basketModel.getSumAllProducts()); // отобразить сумма всех продуктов в корзине
   let i = 0;
   basket.items = basketModel.basketProducts.map((item) => {
-    const basketItem = new BasketItem(cardBasketTemplate, events, { onClick: () => events.emit('basket:basketItemRemove', item) });
+    const basketItem = new CartItem(cardBasketTemplate, events, { onClick: () => events.emit('basket:basketItemRemove', item) });
     i = i + 1;
     return basketItem.render(item, i);
   })
@@ -154,7 +154,7 @@ events.on('modal:close', () => {
 
 /* Получаем данные с сервера */
 apiModel.getListProductCard()
-  .then(function (data: IProductItem[]) {
+  .then(function (data: IGoodsItem[]) {
     dataModel.productCards = data;
   })
   .catch(error => console.log(error))

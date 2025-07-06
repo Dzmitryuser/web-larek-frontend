@@ -1,8 +1,8 @@
-import { IActions, IProductItem } from "../../types";
-import { IEvents } from "../base/events";
+import { IActions, IGoodsItem } from "../types";
+import { IEvents } from "./base/events";
 
 export interface ICard {
-  render(data: IProductItem): HTMLElement;
+  render(data: IGoodsItem): HTMLElement;
 }
 
 export class Card implements ICard {
@@ -49,7 +49,7 @@ export class Card implements ICard {
     return String(value) + ' синапсов'
   }
 
-  render(data: IProductItem): HTMLElement {
+  render(data: IGoodsItem): HTMLElement {
     this._cardCategory.textContent = data.category;
     this.cardCategory = data.category;
     this._cardTitle.textContent = data.title;

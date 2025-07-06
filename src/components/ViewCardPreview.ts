@@ -1,11 +1,11 @@
-import { Card } from "./Card";
-import { IActions, IProductItem } from "../../types";
-import { IEvents } from "../base/events";
+import { Card } from "./ViewCard";
+import { IActions, IGoodsItem } from "../types";
+import { IEvents } from "./base/events";
 
 export interface ICard {
   text: HTMLElement;
   button: HTMLElement;
-  render(data: IProductItem): HTMLElement;
+  render(data: IGoodsItem): HTMLElement;
 }
 
 export class CardPreview extends Card implements ICard {
@@ -19,7 +19,7 @@ export class CardPreview extends Card implements ICard {
     this.button.addEventListener('click', () => { this.events.emit('card:addBasket') });
   }
 
-  notSale(data:IProductItem) {
+  notSale(data:IGoodsItem) {
     if(data.price) {
       return 'Купить'
     } else {
@@ -28,7 +28,7 @@ export class CardPreview extends Card implements ICard {
     }
   }
 
-  render(data: IProductItem): HTMLElement {
+  render(data: IGoodsItem): HTMLElement {
     this._cardCategory.textContent = data.category;
     this.cardCategory = data.category;
     this._cardTitle.textContent = data.title;

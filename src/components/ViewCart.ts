@@ -1,7 +1,7 @@
-import { createElement } from "../../utils/utils";
-import { IEvents } from "../base/events";
+import { createElement } from "../utils/utils";
+import { IEvents } from "./base/events";
 
-export interface IBasket {
+export interface ICart {
   basket: HTMLElement;
   title: HTMLElement;
   basketList: HTMLElement;
@@ -14,7 +14,7 @@ export interface IBasket {
   render(): HTMLElement;
 }
 
-export class Basket implements IBasket {
+export class Cart implements ICart {
   basket: HTMLElement;
   title: HTMLElement;
   basketList: HTMLElement;

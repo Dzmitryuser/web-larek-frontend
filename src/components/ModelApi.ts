@@ -1,16 +1,16 @@
-import { ApiListResponse, Api } from '../base/api'
-import { IOrderLot, IOrderResult, IProductItem } from '../../types';
+import { ApiListResponse, Api } from './base/api'
+import { IOrderedLot, IOrderResult, IGoodsItem } from '../types';
 
 export interface IApiModel {
   cdn: string;
-  items: IProductItem[];
-  getListProductCard: () => Promise<IProductItem[]>;
-  postOrderLot: (order: IOrderLot) => Promise<IOrderResult>;
+  items: IGoodsItem[];
+  getListProductCard: () => Promise<IGoodsItem[]>;
+  postOrderLot: (order: IOrderedLot) => Promise<IOrderResult>;
 }
 
 export class ApiModel extends Api {
   cdn: string;
-  items: IProductItem[];
+  items: IGoodsItem[];
 
   constructor(cdn: string, baseUrl: string, options?: RequestInit) {
     super(baseUrl, options);
@@ -18,8 +18,8 @@ export class ApiModel extends Api {
   }
 
   // получаем массив объектов(карточек) с сервера
-  getListProductCard(): Promise<IProductItem[]> {
-    return this.get('/product').then((data: ApiListResponse<IProductItem>) =>
+  getListProductCard(): Promise<IGoodsItem[]> {
+    return this.get('/product').then((data: ApiListResponse<IGoodsItem>) =>
       data.items.map((item) => ({
         ...item,
         image: this.cdn + item.image,
@@ -28,7 +28,7 @@ export class ApiModel extends Api {
   }
 
   // получаем ответ от сервера по сделанному заказу
-  postOrderLot(order: IOrderLot): Promise<IOrderResult> {
+  postOrderLot(order: IOrderedLot): Promise<IOrderResult> {
     return this.post(`/order`, order).then((data: IOrderResult) => data);
   }
 }

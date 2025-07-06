@@ -1,16 +1,16 @@
-import { IActions, IProductItem } from "../../types";
-import { IEvents } from "../base/events";
+import { IActions, IGoodsItem } from "../types";
+import { IEvents } from "./base/events";
 
-export interface IBasketItem {
+export interface ICartItem {
   basketItem: HTMLElement;
 	index:HTMLElement;
 	title: HTMLElement;
 	price: HTMLElement;
 	buttonDelete: HTMLButtonElement;
-	render(data: IProductItem, item: number): HTMLElement;
+	render(data: IGoodsItem, item: number): HTMLElement;
 }
 
-export class BasketItem implements IBasketItem {
+export class CartItem implements ICartItem {
   basketItem: HTMLElement;
 	index:HTMLElement;
 	title: HTMLElement;
@@ -36,7 +36,7 @@ export class BasketItem implements IBasketItem {
     return String(value) + ' синапсов'
   }
 
-	render(data: IProductItem, item: number) {
+	render(data: IGoodsItem, item: number) {
 		this.index.textContent = String(item);
 		this.title.textContent = data.title;
 		this.price.textContent = this.setPrice(data.price);
