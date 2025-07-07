@@ -3,10 +3,10 @@ import { IEvents } from './base/events';
 
 export interface ICart {
 	basket: HTMLElement;
-	title: HTMLElement;
 	basketList: HTMLElement;
 	button: HTMLButtonElement;
 	basketPrice: HTMLElement;
+	title: HTMLElement;
 	headerBasketButton: HTMLButtonElement;
 	headerBasketCounter: HTMLElement;
 	renderHeaderBasketCounter(value: number): void;
@@ -16,10 +16,10 @@ export interface ICart {
 
 export class Cart implements ICart {
 	basket: HTMLElement;
-	title: HTMLElement;
 	basketList: HTMLElement;
 	button: HTMLButtonElement;
 	basketPrice: HTMLElement;
+	title: HTMLElement;
 	headerBasketButton: HTMLButtonElement;
 	headerBasketCounter: HTMLElement;
 
@@ -27,10 +27,10 @@ export class Cart implements ICart {
 		this.basket = template.content
 			.querySelector('.basket')
 			.cloneNode(true) as HTMLElement;
-		this.title = this.basket.querySelector('.modal__title');
 		this.basketList = this.basket.querySelector('.basket__list');
 		this.button = this.basket.querySelector('.basket__button');
 		this.basketPrice = this.basket.querySelector('.basket__price');
+		this.title = this.basket.querySelector('.modal__title');
 		this.headerBasketButton = document.querySelector('.header__basket');
 		this.headerBasketCounter = document.querySelector(
 			'.header__basket-counter'
@@ -60,12 +60,12 @@ export class Cart implements ICart {
 		}
 	}
 
-	renderHeaderBasketCounter(value: number) {
-		this.headerBasketCounter.textContent = String(value);
+	renderSumAllProducts(total: number) {
+		this.basketPrice.textContent = `${total} синапсов`;
 	}
 
-	renderSumAllProducts(sumAll: number) {
-		this.basketPrice.textContent = String(sumAll + ' синапсов');
+	renderHeaderBasketCounter(value: number) {
+		this.headerBasketCounter.textContent = `${value}`;
 	}
 
 	render() {

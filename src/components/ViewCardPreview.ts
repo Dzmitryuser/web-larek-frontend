@@ -3,14 +3,14 @@ import { IActions, IGoodsItem } from '../types';
 import { IEvents } from './base/events';
 
 export interface ICard {
-	text: HTMLElement;
 	button: HTMLElement;
-	render(data: IGoodsItem): HTMLElement;
+	text: HTMLElement;
+	render(itemData: IGoodsItem): HTMLElement;
 }
 
 export class CardPreview extends Card implements ICard {
-	text: HTMLElement;
 	button: HTMLElement;
+	text: HTMLElement;
 
 	constructor(
 		template: HTMLTemplateElement,
@@ -18,8 +18,8 @@ export class CardPreview extends Card implements ICard {
 		actions?: IActions
 	) {
 		super(template, events, actions);
-		this.text = this._cardElement.querySelector('.card__text');
 		this.button = this._cardElement.querySelector('.card__button');
+		this.text = this._cardElement.querySelector('.card__text');
 		this.button.addEventListener('click', () => {
 			this.events.emit('card:addBasket');
 		});
@@ -34,15 +34,15 @@ export class CardPreview extends Card implements ICard {
 		}
 	}
 
-	render(data: IGoodsItem): HTMLElement {
-		this._cardCategory.textContent = data.category;
-		this.cardCategory = data.category;
-		this._cardTitle.textContent = data.title;
-		this._cardImage.src = data.image;
+	render(itemData: IGoodsItem): HTMLElement {
+		this._cardCategory.textContent = itemData.category;
+		this._cardTitle.textContent = itemData.title;
+		this._cardImage.src = itemData.image;
 		this._cardImage.alt = this._cardTitle.textContent;
-		this._cardPrice.textContent = this.setPrice(data.price);
-		this.text.textContent = data.description;
-		this.button.textContent = this.notSale(data);
+		this.cardCategory = itemData.category;
+		this._cardPrice.textContent = this.setPrice(itemData.price);
+		this.text.textContent = itemData.description;
+		this.button.textContent = this.notSale(itemData);
 		return this._cardElement;
 	}
 }

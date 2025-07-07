@@ -69,7 +69,7 @@ events.on('modalCard:open', (item: IGoodsItem) => {
 
 // добавляем товар в корзину
 events.on('card:addBasket', () => {
-	basketModel.setSelectedСard(dataModel.selectedСard);
+	basketModel.setSelectedCard(dataModel.selectedCard);
 	basket.renderHeaderBasketCounter(basketModel.getCounter());
 	modal.close();
 });

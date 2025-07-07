@@ -2,17 +2,21 @@ import { IGoodsItem } from '../types';
 import { IEvents } from './base/events';
 
 export interface IDataModel {
+	selectedCard: IGoodsItem;
 	productCards: IGoodsItem[];
-	selectedСard: IGoodsItem;
 	setPreview(item: IGoodsItem): void;
 }
 
 export class DataModel implements IDataModel {
+	selectedCard: IGoodsItem;
 	protected _productCards: IGoodsItem[];
-	selectedСard: IGoodsItem;
 
 	constructor(protected events: IEvents) {
 		this._productCards = [];
+	}
+
+	get productCards() {
+		return this._productCards;
 	}
 
 	set productCards(data: IGoodsItem[]) {
@@ -20,12 +24,8 @@ export class DataModel implements IDataModel {
 		this.events.emit('productCards:receive');
 	}
 
-	get productCards() {
-		return this._productCards;
-	}
-
 	setPreview(item: IGoodsItem) {
-		this.selectedСard = item;
+		this.selectedCard = item;
 		this.events.emit('modalCard:open', item);
 	}
 }

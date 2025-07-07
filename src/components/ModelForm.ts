@@ -3,33 +3,34 @@ import { FormErrors } from '../types/index';
 
 export interface IFormModel {
 	payment: string;
-	email: string;
 	phone: string;
 	address: string;
 	total: number;
 	items: string[];
+	email: string;
+
 	setOrderAddress(field: string, value: string): void;
-	validateOrder(): boolean;
 	setOrderData(field: string, value: string): void;
+	validateOrder(): boolean;
 	validateContacts(): boolean;
 	getOrderLot(): object;
 }
 
 export class FormModel implements IFormModel {
 	payment: string;
-	email: string;
 	phone: string;
 	address: string;
 	total: number;
 	items: string[];
+	email: string;
 	formErrors: FormErrors = {};
 
 	constructor(protected events: IEvents) {
 		this.payment = '';
-		this.email = '';
 		this.phone = '';
 		this.address = '';
 		this.total = 0;
+		this.email = '';
 		this.items = [];
 	}
 
@@ -40,6 +41,19 @@ export class FormModel implements IFormModel {
 		}
 
 		if (this.validateOrder()) {
+			this.events.emit('order:ready', this.getOrderLot());
+		}
+	}
+
+	// устанавливаем значение email и телефон
+	setOrderData(field: string, value: string) {
+		if (field === 'email') {
+			this.email = value;
+		} else if (field === 'phone') {
+			this.phone = value;
+		}
+
+		if (this.validateContacts()) {
 			this.events.emit('order:ready', this.getOrderLot());
 		}
 	}
@@ -60,19 +74,6 @@ export class FormModel implements IFormModel {
 		this.formErrors = errors;
 		this.events.emit('formErrors:address', this.formErrors);
 		return Object.keys(errors).length === 0;
-	}
-
-	// устанавливаем значение email и телефон
-	setOrderData(field: string, value: string) {
-		if (field === 'email') {
-			this.email = value;
-		} else if (field === 'phone') {
-			this.phone = value;
-		}
-
-		if (this.validateContacts()) {
-			this.events.emit('order:ready', this.getOrderLot());
-		}
 	}
 
 	// валидируем email и телефон
@@ -105,10 +106,10 @@ export class FormModel implements IFormModel {
 	getOrderLot() {
 		return {
 			payment: this.payment,
-			email: this.email,
 			phone: this.phone,
 			address: this.address,
 			total: this.total,
+			email: this.email,
 			items: this.items,
 		};
 	}
