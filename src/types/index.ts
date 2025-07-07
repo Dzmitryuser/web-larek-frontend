@@ -17,7 +17,6 @@ export interface IOrderForm {
   email?: string;
   address?: string;
   phone?: string;
-	
 }
 
 export type ModalContent = HTMLElement | string;
