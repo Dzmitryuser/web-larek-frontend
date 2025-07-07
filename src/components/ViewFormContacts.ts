@@ -2,26 +2,29 @@ import { IEvents } from './base/events';
 
 export interface IContacts {
 	formContacts: HTMLFormElement;
-	inputAll: HTMLInputElement[];
 	buttonSubmit: HTMLButtonElement;
 	formErrors: HTMLElement;
+	inputAll: HTMLInputElement[];
+
 	render(): HTMLElement;
 }
 
 export class Contacts implements IContacts {
 	formContacts: HTMLFormElement;
-	inputAll: HTMLInputElement[];
 	buttonSubmit: HTMLButtonElement;
 	formErrors: HTMLElement;
+	inputAll: HTMLInputElement[];
+
 
 	constructor(template: HTMLTemplateElement, protected events: IEvents) {
 		this.formContacts = template.content
 			.querySelector('.form')
 			.cloneNode(true) as HTMLFormElement;
+					this.buttonSubmit = this.formContacts.querySelector('.button');
 		this.inputAll = Array.from(
 			this.formContacts.querySelectorAll('.form__input')
 		);
-		this.buttonSubmit = this.formContacts.querySelector('.button');
+
 		this.formErrors = this.formContacts.querySelector('.form__errors');
 
 		this.inputAll.forEach((item) => {

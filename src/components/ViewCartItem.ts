@@ -3,18 +3,18 @@ import { IEvents } from './base/events';
 
 export interface ICartItem {
 	basketItem: HTMLElement;
-	index: HTMLElement;
 	title: HTMLElement;
 	price: HTMLElement;
+	index: HTMLElement;
 	buttonDelete: HTMLButtonElement;
 	render(data: IGoodsItem, item: number): HTMLElement;
 }
 
 export class CartItem implements ICartItem {
 	basketItem: HTMLElement;
-	index: HTMLElement;
 	title: HTMLElement;
 	price: HTMLElement;
+	index: HTMLElement;
 	buttonDelete: HTMLButtonElement;
 
 	constructor(
@@ -39,7 +39,7 @@ export class CartItem implements ICartItem {
 		if (value === null) {
 			return 'Бесценно';
 		}
-		return String(value) + ' синапсов';
+		return `${value} синапсов`;
 	}
 
 	render(data: IGoodsItem, item: number) {
