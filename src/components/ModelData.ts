@@ -4,7 +4,7 @@ import { IEvents } from './base/events';
 export interface IDataModel {
 	selectedCard: IGoodsItem;
 	productCards: IGoodsItem[];
-	setPreview(item: IGoodsItem): void;
+	setPreview(goodsItem: IGoodsItem): void;
 }
 
 export class DataModel implements IDataModel {
@@ -24,8 +24,8 @@ export class DataModel implements IDataModel {
 		this.events.emit('productCards:receive');
 	}
 
-	setPreview(item: IGoodsItem) {
-		this.selectedCard = item;
-		this.events.emit('modalCard:open', item);
+	setPreview(goodsItem: IGoodsItem) {
+		this.selectedCard = goodsItem;
+		this.events.emit('modalCard:open', goodsItem);
 	}
 }

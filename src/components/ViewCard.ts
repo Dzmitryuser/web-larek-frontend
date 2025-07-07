@@ -12,11 +12,11 @@ export class Card implements ICard {
 	protected _cardPrice: HTMLElement;
 	protected _cardCategory: HTMLElement;
 	protected _colors = <Record<string, string>>{
-		дополнительное: 'additional',
-		'софт-скил': 'soft',
-		кнопка: 'button',
+		'дополнительное': 'additional',
+	    'кнопка': 'button',
 		'хард-скил': 'hard',
-		другое: 'other',
+		'софт-скил': 'soft',
+		'другое': 'other',
 	};
 
 	constructor(

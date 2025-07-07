@@ -35,8 +35,8 @@ export class FormModel implements IFormModel {
 	}
 
 	// устанавливаем значение адрес
-	setOrderAddress(field: string, value: string) {
-		if (field === 'address') {
+	setOrderAddress(adressField: string, value: string) {
+		if (adressField === 'address') {
 			this.address = value;
 		}
 
@@ -46,10 +46,10 @@ export class FormModel implements IFormModel {
 	}
 
 	// устанавливаем значение email и телефон
-	setOrderData(field: string, value: string) {
-		if (field === 'email') {
+	setOrderData(contactField: string, value: string) {
+		if (contactField === 'email') {
 			this.email = value;
-		} else if (field === 'phone') {
+		} else if (contactField === 'phone') {
 			this.phone = value;
 		}
 
@@ -60,12 +60,12 @@ export class FormModel implements IFormModel {
 
 	// валидируем адрес
 	validateOrder() {
-		const regexp = /^[а-яА-ЯёЁa-zA-Z0-9\s\/.,-]{7,}$/;
+		const adressRegexp = /^[а-яА-ЯёЁa-zA-Z0-9\s\/.,-]{7,}$/;
 		const errors: typeof this.formErrors = {};
 
 		if (!this.address) {
 			errors.address = 'Необходимо указать адрес';
-		} else if (!regexp.test(this.address)) {
+		} else if (!adressRegexp.test(this.address)) {
 			errors.address = 'Укажите настоящий адрес';
 		} else if (!this.payment) {
 			errors.payment = 'Выберите способ оплаты';
@@ -78,13 +78,13 @@ export class FormModel implements IFormModel {
 
 	// валидируем email и телефон
 	validateContacts() {
-		const regexpEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-		const regexpPhone = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10}$/;
+		const emailRegexp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+		const phoneRegexp = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10}$/;
 		const errors: typeof this.formErrors = {};
 
 		if (!this.email) {
 			errors.email = 'Необходимо указать email';
-		} else if (!regexpEmail.test(this.email)) {
+		} else if (!emailRegexp.test(this.email)) {
 			errors.email = 'Некорректный адрес электронной почты';
 		}
 
@@ -94,7 +94,7 @@ export class FormModel implements IFormModel {
 
 		if (!this.phone) {
 			errors.phone = 'Необходимо указать телефон';
-		} else if (!regexpPhone.test(this.phone)) {
+		} else if (!phoneRegexp.test(this.phone)) {
 			errors.phone = 'Некорректный формат номера телефона';
 		}
 

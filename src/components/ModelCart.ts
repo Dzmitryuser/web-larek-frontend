@@ -5,7 +5,7 @@ export interface ICartModel {
     getTotalAllGoods: () => number;
 	getCounter: () => number;
 	setSelectedItem(data: IGoodsItem): void;
-	deleteItemFromCart(item: IGoodsItem): void;
+	deleteItemFromCart(goodsItem: IGoodsItem): void;
 	clearCartItems(): void;
 }
 
@@ -44,8 +44,8 @@ export class CartModel implements ICartModel {
 	}
 
 	// удаляем товар из корзины
-	deleteItemFromCart(item: IGoodsItem) {
-		const index = this._cartGoods.indexOf(item);
+	deleteItemFromCart(goodsItem: IGoodsItem) {
+		const index = this._cartGoods.indexOf(goodsItem);
 		if (index >= 0) {
 			this._cartGoods.splice(index, 1);
 		}
