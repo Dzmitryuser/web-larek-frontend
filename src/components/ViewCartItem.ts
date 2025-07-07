@@ -25,9 +25,9 @@ export class CartItem implements ICartItem {
 		this.cartItem = template.content
 			.querySelector('.basket__item')
 			.cloneNode(true) as HTMLElement;
+		this.price = this.cartItem.querySelector('.card__price');
 		this.index = this.cartItem.querySelector('.basket__item-index');
 		this.title = this.cartItem.querySelector('.card__title');
-		this.price = this.cartItem.querySelector('.card__price');
 		this.buttonDelete = this.cartItem.querySelector('.basket__item-delete');
 
 		if (actions?.onClick) {

@@ -104,6 +104,7 @@ events.on('basket:open', () => {
 	modal.render();
 });
 
+
 // открываем модалку заполнения данных
 events.on('order:open', () => {
 	modal.content = order.render();

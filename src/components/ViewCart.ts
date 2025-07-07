@@ -29,12 +29,10 @@ export class Cart implements ICart {
 			.cloneNode(true) as HTMLElement;
 		this.cartList = this.cart.querySelector('.basket__list');
 		this.button = this.cart.querySelector('.basket__button');
+		this.headerCartButton = document.querySelector('.header__basket');
+		this.headerCartCounter = document.querySelector('.header__basket-counter');
 		this.cartPrice = this.cart.querySelector('.basket__price');
 		this.title = this.cart.querySelector('.modal__title');
-		this.headerCartButton = document.querySelector('.header__basket');
-		this.headerCartCounter = document.querySelector(
-			'.header__basket-counter'
-		);
 
 		this.button.addEventListener('click', () => {
 			this.events.emit('order:open');
