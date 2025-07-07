@@ -1,7 +1,10 @@
 # Проектная работа "Веб-ларек"
 
-## ССылка на репозиторий
+## Сcылка на репозиторий
 https://github.com/Dzmitryuser/web-larek-frontend.git
+
+## Сcылка на GitHub Pages
+https://dzmitryuser.github.io/web-larek-frontend/
 
 ## Описание архитектуры
 
