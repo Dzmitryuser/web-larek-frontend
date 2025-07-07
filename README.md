@@ -1,5 +1,8 @@
 # Проектная работа "Веб-ларек"
 
+## ССылка на репозиторий
+https://github.com/Dzmitryuser/web-larek-frontend.git
+
 ## Описание архитектуры
 
 Проект реализован по принципу MVP (Model-View-Presenter), обеспечивающему четкое разделение ответственностей:
@@ -112,7 +115,10 @@ interface IOrderResult {
 
 ### `FormErrors` - ошибки формы
 ```typescript
-type FormErrors = Partial<Record<keyof IOrder, string>>;
+type FormErrors = Partial<Record<keyof IOrder, string>> {
+	email?: string;
+	phone?: string;
+};
 ```
 **Использование**: Валидация и отображение ошибок формы.
 
