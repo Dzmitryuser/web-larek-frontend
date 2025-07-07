@@ -1,33 +1,33 @@
 import { IGoodsItem } from '../types';
 
 export interface ICartModel {
-	basketProducts: IGoodsItem[];
-    getSumAllProducts: () => number;
+	cartGoods: IGoodsItem[];
+    getTotalAllGoods: () => number;
 	getCounter: () => number;
-	setSelectedCard(data: IGoodsItem): void;
-	deleteCardToBasket(item: IGoodsItem): void;
-	clearBasketProducts(): void;
+	setSelectedItem(data: IGoodsItem): void;
+	deleteItemFromCart(item: IGoodsItem): void;
+	clearCartItems(): void;
 }
 
 export class CartModel implements ICartModel {
-	protected _basketProducts: IGoodsItem[];
+	protected _cartGoods: IGoodsItem[];
 
 	constructor() {
-		this._basketProducts = [];
+		this._cartGoods = [];
 	}
 
-	set basketProducts(data: IGoodsItem[]) {
-		this._basketProducts = data;
+	set cartGoods(data: IGoodsItem[]) {
+		this._cartGoods = data;
 	}
 
-	get basketProducts() {
-		return this._basketProducts;
+	get cartGoods() {
+		return this._cartGoods;
 	}
 
 	// стоимость товаров в корзине
-	getSumAllProducts() {
+	getTotalAllGoods() {
 		let sumAll = 0;
-		this.basketProducts.forEach((item) => {
+		this.cartGoods.forEach((item) => {
 			sumAll = sumAll + item.price;
 		});
 		return sumAll;
@@ -35,24 +35,24 @@ export class CartModel implements ICartModel {
 
 	// сумма товаров в корзине
 	getCounter() {
-		return this.basketProducts.length;
+		return this.cartGoods.length;
 	}
 
 	// добавляем товар в корзину
-	setSelectedCard(data: IGoodsItem) {
-		this._basketProducts.push(data);
+	setSelectedItem(data: IGoodsItem) {
+		this._cartGoods.push(data);
 	}
 
 	// удаляем товар из корзины
-	deleteCardToBasket(item: IGoodsItem) {
-		const index = this._basketProducts.indexOf(item);
+	deleteItemFromCart(item: IGoodsItem) {
+		const index = this._cartGoods.indexOf(item);
 		if (index >= 0) {
-			this._basketProducts.splice(index, 1);
+			this._cartGoods.splice(index, 1);
 		}
 	}
 
 	// Очищаем корзину
-	clearBasketProducts() {
-		this.basketProducts = [];
+	clearCartItems() {
+		this.cartGoods = [];
 	}
 }

@@ -2,44 +2,44 @@ import { createElement } from '../utils/utils';
 import { IEvents } from './base/events';
 
 export interface ICart {
-	basket: HTMLElement;
-	basketList: HTMLElement;
+	cart: HTMLElement;
+	cartList: HTMLElement;
 	button: HTMLButtonElement;
-	basketPrice: HTMLElement;
+	cartPrice: HTMLElement;
 	title: HTMLElement;
-	headerBasketButton: HTMLButtonElement;
-	headerBasketCounter: HTMLElement;
-	renderHeaderBasketCounter(value: number): void;
+	headerCartButton: HTMLButtonElement;
+	headerCartCounter: HTMLElement;
+	renderHeaderCartCounter(value: number): void;
 	renderSumAllProducts(sumAll: number): void;
 	render(): HTMLElement;
 }
 
 export class Cart implements ICart {
-	basket: HTMLElement;
-	basketList: HTMLElement;
+	cart: HTMLElement;
+	cartList: HTMLElement;
 	button: HTMLButtonElement;
-	basketPrice: HTMLElement;
+	cartPrice: HTMLElement;
 	title: HTMLElement;
-	headerBasketButton: HTMLButtonElement;
-	headerBasketCounter: HTMLElement;
+	headerCartButton: HTMLButtonElement;
+	headerCartCounter: HTMLElement;
 
 	constructor(template: HTMLTemplateElement, protected events: IEvents) {
-		this.basket = template.content
+		this.cart = template.content
 			.querySelector('.basket')
 			.cloneNode(true) as HTMLElement;
-		this.basketList = this.basket.querySelector('.basket__list');
-		this.button = this.basket.querySelector('.basket__button');
-		this.basketPrice = this.basket.querySelector('.basket__price');
-		this.title = this.basket.querySelector('.modal__title');
-		this.headerBasketButton = document.querySelector('.header__basket');
-		this.headerBasketCounter = document.querySelector(
+		this.cartList = this.cart.querySelector('.basket__list');
+		this.button = this.cart.querySelector('.basket__button');
+		this.cartPrice = this.cart.querySelector('.basket__price');
+		this.title = this.cart.querySelector('.modal__title');
+		this.headerCartButton = document.querySelector('.header__basket');
+		this.headerCartCounter = document.querySelector(
 			'.header__basket-counter'
 		);
 
 		this.button.addEventListener('click', () => {
 			this.events.emit('order:open');
 		});
-		this.headerBasketButton.addEventListener('click', () => {
+		this.headerCartButton.addEventListener('click', () => {
 			this.events.emit('basket:open');
 		});
 
@@ -48,11 +48,11 @@ export class Cart implements ICart {
 
 	set items(items: HTMLElement[]) {
 		if (items.length) {
-			this.basketList.replaceChildren(...items);
+			this.cartList.replaceChildren(...items);
 			this.button.removeAttribute('disabled');
 		} else {
 			this.button.setAttribute('disabled', 'disabled');
-			this.basketList.replaceChildren(
+			this.cartList.replaceChildren(
 				createElement<HTMLParagraphElement>('p', {
 					textContent: 'Корзина пуста',
 				})
@@ -61,15 +61,15 @@ export class Cart implements ICart {
 	}
 
 	renderSumAllProducts(total: number) {
-		this.basketPrice.textContent = `${total} синапсов`;
+		this.cartPrice.textContent = `${total} синапсов`;
 	}
 
-	renderHeaderBasketCounter(value: number) {
-		this.headerBasketCounter.textContent = `${value}`;
+	renderHeaderCartCounter(value: number) {
+		this.headerCartCounter.textContent = `${value}`;
 	}
 
 	render() {
 		this.title.textContent = 'Корзина';
-		return this.basket;
+		return this.cart;
 	}
 }

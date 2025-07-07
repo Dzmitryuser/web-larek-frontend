@@ -23,8 +23,8 @@ const cardCatalogTemplate = document.querySelector(
 const cardPreviewTemplate = document.querySelector(
 	'#card-preview'
 ) as HTMLTemplateElement;
-const basketTemplate = document.querySelector('#basket') as HTMLTemplateElement;
-const cardBasketTemplate = document.querySelector(
+const cartTemplate = document.querySelector('#basket') as HTMLTemplateElement;
+const cardCartTemplate = document.querySelector(
 	'#card-basket'
 ) as HTMLTemplateElement;
 const orderTemplate = document.querySelector('#order') as HTMLTemplateElement;
@@ -39,8 +39,8 @@ const apiModel = new ApiModel(CDN_URL, API_URL);
 const events = new EventEmitter();
 const dataModel = new DataModel(events);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
-const basket = new Cart(basketTemplate, events);
-const basketModel = new CartModel();
+const cart = new Cart(cartTemplate, events);
+const cartModel = new CartModel();
 const formModel = new FormModel(events);
 const order = new Order(orderTemplate, events);
 const contacts = new Contacts(contactsTemplate, events);
@@ -69,38 +69,38 @@ events.on('modalCard:open', (item: IGoodsItem) => {
 
 // добавляем товар в корзину
 events.on('card:addBasket', () => {
-	basketModel.setSelectedCard(dataModel.selectedCard);
-	basket.renderHeaderBasketCounter(basketModel.getCounter());
+	cartModel.setSelectedItem(dataModel.selectedCard);
+	cart.renderHeaderCartCounter(cartModel.getCounter());
 	modal.close();
 });
 
 // открываем модалку корзины
 events.on('basket:open', () => {
-	basket.renderSumAllProducts(basketModel.getSumAllProducts());
+	cart.renderSumAllProducts(cartModel.getTotalAllGoods());
 	let i = 0;
-	basket.items = basketModel.basketProducts.map((item) => {
-		const basketItem = new CartItem(cardBasketTemplate, events, {
+	cart.items = cartModel.cartGoods.map((item) => {
+		const cartItem = new CartItem(cardCartTemplate, events, {
 			onClick: () => events.emit('basket:basketItemRemove', item),
 		});
 		i = i + 1;
-		return basketItem.render(item, i);
+		return cartItem.render(item, i);
 	});
-	modal.content = basket.render();
+	modal.content = cart.render();
 	modal.render();
 });
 
 // удаление товара из корзины
 events.on('basket:basketItemRemove', (item: IGoodsItem) => {
-	basketModel.deleteCardToBasket(item);
-	basket.renderHeaderBasketCounter(basketModel.getCounter());
-	basket.renderSumAllProducts(basketModel.getSumAllProducts());
+	cartModel.deleteItemFromCart(item);
+	cart.renderHeaderCartCounter(cartModel.getCounter());
+	cart.renderSumAllProducts(cartModel.getTotalAllGoods());
 	let i = 0;
-	basket.items = basketModel.basketProducts.map((item) => {
-		const basketItem = new CartItem(cardBasketTemplate, events, {
+	cart.items = cartModel.cartGoods.map((item) => {
+		const cartItem = new CartItem(cardCartTemplate, events, {
 			onClick: () => events.emit('basket:basketItemRemove', item),
 		});
 		i = i + 1;
-		return basketItem.render(item, i);
+		return cartItem.render(item, i);
 	});
 });
 
@@ -108,7 +108,7 @@ events.on('basket:basketItemRemove', (item: IGoodsItem) => {
 events.on('order:open', () => {
 	modal.content = order.render();
 	modal.render();
-	formModel.items = basketModel.basketProducts.map((item) => item.id);
+	formModel.items = cartModel.cartGoods.map((item) => item.id);
 });
 // передаём способ оплаты
 events.on('order:paymentSelection', (button: HTMLButtonElement) => {
@@ -131,7 +131,7 @@ events.on('formErrors:address', (errors: Partial<IOrderForm>) => {
 
 // открываем модалку контактных данных
 events.on('contacts:open', () => {
-	formModel.total = basketModel.getSumAllProducts();
+	formModel.total = cartModel.getTotalAllGoods();
 	modal.content = contacts.render();
 	modal.render();
 });
@@ -157,9 +157,9 @@ events.on('success:open', () => {
 		.then((data) => {
 			console.log(data);
 			const success = new Success(successTemplate, events);
-			modal.content = success.render(basketModel.getSumAllProducts());
-			basketModel.clearBasketProducts();
-			basket.renderHeaderBasketCounter(basketModel.getCounter());
+			modal.content = success.render(cartModel.getTotalAllGoods());
+			cartModel.clearCartItems();
+			cart.renderHeaderCartCounter(cartModel.getCounter());
 			modal.render();
 		})
 		.catch((error) => console.log(error));
