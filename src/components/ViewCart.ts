@@ -10,7 +10,7 @@ export interface ICart {
 	headerCartButton: HTMLButtonElement;
 	headerCartCounter: HTMLElement;
 	renderHeaderCartCounter(value: number): void;
-	renderSumAllProducts(sumAll: number): void;
+	renderTotalAllGoods(sumAll: number): void;
 	render(): HTMLElement;
 }
 
@@ -60,7 +60,7 @@ export class Cart implements ICart {
 		}
 	}
 
-	renderSumAllProducts(total: number) {
+	renderTotalAllGoods(total: number) {
 		this.cartPrice.textContent = `${total} синапсов`;
 	}
 

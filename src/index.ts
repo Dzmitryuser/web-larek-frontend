@@ -3,17 +3,17 @@ import './scss/styles.scss';
 import { CDN_URL, API_URL } from './utils/constants';
 import { EventEmitter } from './components/base/events';
 import { ApiModel } from './components/ModelApi';
-import { DataModel } from './components/ModelData';
-import { Card } from './components/ViewCard';
-import { CardPreview } from './components/ViewCardPreview';
-import { IOrderForm, IGoodsItem } from './types';
-import { Modal } from './components/ViewModal';
-import { ensureElement } from './utils/utils';
-import { CartModel } from './components/ModelCart';
-import { Cart } from './components/ViewCart';
 import { CartItem } from './components/ViewCartItem';
 import { FormModel } from './components/ModelForm';
 import { Order } from './components/ViewFormOrder';
+import { IOrderForm, IGoodsItem } from './types';
+import { Modal } from './components/ViewModal';
+import { ensureElement } from './utils/utils';
+import { DataModel } from './components/ModelData';
+import { Card } from './components/ViewCard';
+import { CardPreview } from './components/ViewCardPreview';
+import { CartModel } from './components/ModelCart';
+import { Cart } from './components/ViewCart';
 import { Contacts } from './components/ViewFormContacts';
 import { Success } from './components/ViewSuccess';
 
@@ -38,10 +38,10 @@ const successTemplate = document.querySelector(
 const apiModel = new ApiModel(CDN_URL, API_URL);
 const events = new EventEmitter();
 const dataModel = new DataModel(events);
-const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const cart = new Cart(cartTemplate, events);
 const cartModel = new CartModel();
 const formModel = new FormModel(events);
+const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const order = new Order(orderTemplate, events);
 const contacts = new Contacts(contactsTemplate, events);
 
@@ -74,9 +74,24 @@ events.on('card:addBasket', () => {
 	modal.close();
 });
 
+// удаляем товар из корзины
+events.on('basket:basketItemRemove', (item: IGoodsItem) => {
+	cartModel.deleteItemFromCart(item);
+	cart.renderHeaderCartCounter(cartModel.getCounter());
+	cart.renderTotalAllGoods(cartModel.getTotalAllGoods());
+	let i = 0;
+	cart.items = cartModel.cartGoods.map((item) => {
+		const cartItem = new CartItem(cardCartTemplate, events, {
+			onClick: () => events.emit('basket:basketItemRemove', item),
+		});
+		i = i + 1;
+		return cartItem.render(item, i);
+	});
+});
+
 // открываем модалку корзины
 events.on('basket:open', () => {
-	cart.renderSumAllProducts(cartModel.getTotalAllGoods());
+	cart.renderTotalAllGoods(cartModel.getTotalAllGoods());
 	let i = 0;
 	cart.items = cartModel.cartGoods.map((item) => {
 		const cartItem = new CartItem(cardCartTemplate, events, {
@@ -87,21 +102,6 @@ events.on('basket:open', () => {
 	});
 	modal.content = cart.render();
 	modal.render();
-});
-
-// удаление товара из корзины
-events.on('basket:basketItemRemove', (item: IGoodsItem) => {
-	cartModel.deleteItemFromCart(item);
-	cart.renderHeaderCartCounter(cartModel.getCounter());
-	cart.renderSumAllProducts(cartModel.getTotalAllGoods());
-	let i = 0;
-	cart.items = cartModel.cartGoods.map((item) => {
-		const cartItem = new CartItem(cardCartTemplate, events, {
-			onClick: () => events.emit('basket:basketItemRemove', item),
-		});
-		i = i + 1;
-		return cartItem.render(item, i);
-	});
 });
 
 // открываем модалку заполнения данных
