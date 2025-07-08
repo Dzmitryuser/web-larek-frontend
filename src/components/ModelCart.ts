@@ -1,58 +1,60 @@
 import { IGoodsItem } from '../types';
 
 export interface ICartModel {
-	cartGoods: IGoodsItem[];
-    getTotalAllGoods: () => number;
-	getCounter: () => number;
-	setSelectedItem(data: IGoodsItem): void;
-	deleteItemFromCart(goodsItem: IGoodsItem): void;
-	clearCartItems(): void;
+	readonly items: IGoodsItem[];
+	getTotalPrice(): number;
+	getItemsCount(): number;
+	addItem(item: IGoodsItem): void;
+	removeItem(item: IGoodsItem): boolean;
+	clear(): void;
 }
 
 export class CartModel implements ICartModel {
-	protected _cartGoods: IGoodsItem[];
+	private _items: IGoodsItem[];
 
-	constructor() {
-		this._cartGoods = [];
+	constructor(initialItems: IGoodsItem[] = []) {
+		this._items = [...initialItems];
 	}
 
-	set cartGoods(data: IGoodsItem[]) {
-		this._cartGoods = data;
+	get items(): IGoodsItem[] {
+		return [...this._items];
 	}
 
-	get cartGoods() {
-		return this._cartGoods;
+	// расчитываем общую стоимость товаров в корзине
+	getTotalPrice(): number {
+		return this._items.reduce((total, item) => {
+			if (typeof item.price !== 'number' || item.price < 0) {
+				console.warn(`Что-то не так с ценой ${item.id}`);
+				return total;
+			}
+			return total + item.price;
+		}, 0);
 	}
 
-	// общая стоимость товаров в корзине
-	getTotalAllGoods() {
-		let sumAll = 0;
-		this.cartGoods.forEach((item) => {
-			sumAll = sumAll + item.price;
-		});
-		return sumAll;
-	}
-
-	// общее количество товаров в корзине
-	getCounter() {
-		return this.cartGoods.length;
+	// расчитываем количество товаров в корзинe
+	getItemsCount(): number {
+		return this._items.length;
 	}
 
 	// добавляем товар в корзину
-	setSelectedItem(data: IGoodsItem) {
-		this._cartGoods.push(data);
+	addItem(item: IGoodsItem): void {
+		if (!item || typeof item.price !== 'number') {
+			throw new Error('Неверные данные товара');
+		}
+		this._items.push({ ...item });
 	}
 
 	// удаляем товар из корзины
-	deleteItemFromCart(goodsItem: IGoodsItem) {
-		const index = this._cartGoods.indexOf(goodsItem);
-		if (index >= 0) {
-			this._cartGoods.splice(index, 1);
-		}
+	removeItem(item: IGoodsItem): boolean {
+		const index = this._items.findIndex((i) => i.id === item.id);
+		if (index === -1) return false;
+
+		this._items.splice(index, 1);
+		return true;
 	}
 
-	// сбрасываем корзину
-	clearCartItems() {
-		this.cartGoods.length = 0;
+	// очищаем корзину
+	clear(): void {
+		this._items = [];
 	}
 }

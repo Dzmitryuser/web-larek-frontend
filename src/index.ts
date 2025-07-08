@@ -71,18 +71,18 @@ events.on('modalCard:open', (item: IGoodsItem) => {
 
 // добавляем товар в корзину
 events.on('card:addBasket', () => {
-	cartModel.setSelectedItem(dataModel.selectedCard);
-	cart.renderHeaderCartCounter(cartModel.getCounter());
+	cartModel.addItem(dataModel.selectedCard);
+	cart.renderHeaderCartCounter(cartModel.getItemsCount());
 	modal.close();
 });
 
 // удаляем товар из корзины
 events.on('basket:basketItemRemove', (item: IGoodsItem) => {
-	cartModel.deleteItemFromCart(item);
-	cart.renderHeaderCartCounter(cartModel.getCounter());
-	cart.renderTotalAllGoods(cartModel.getTotalAllGoods());
+	cartModel.removeItem(item);
+	cart.renderHeaderCartCounter(cartModel.getItemsCount());
+	cart.renderTotalAllGoods(cartModel.getTotalPrice());
 	let i = 0;
-	cart.items = cartModel.cartGoods.map((item) => {
+	cart.items = cartModel.items.map((item) => {
 		const cartItem = new CartItem(cardCartTemplate, events, {
 			onClick: () => events.emit('basket:basketItemRemove', item),
 		});
@@ -93,9 +93,9 @@ events.on('basket:basketItemRemove', (item: IGoodsItem) => {
 
 // открываем модалку корзины
 events.on('basket:open', () => {
-	cart.renderTotalAllGoods(cartModel.getTotalAllGoods());
+	cart.renderTotalAllGoods(cartModel.getTotalPrice());
 	let i = 0;
-	cart.items = cartModel.cartGoods.map((item) => {
+	cart.items = cartModel.items.map((item) => {
 		const cartItem = new CartItem(cardCartTemplate, events, {
 			onClick: () => events.emit('basket:basketItemRemove', item),
 		});
@@ -111,7 +111,7 @@ events.on('basket:open', () => {
 events.on('order:open', () => {
 	modal.content = order.render();
 	modal.render();
-	formModel.items = cartModel.cartGoods.map((item) => item.id);
+	formModel.items = cartModel.items.map((item) => item.id);
 });
 // передаём способ оплаты
 events.on('order:paymentSelection', (button: HTMLButtonElement) => {
@@ -134,7 +134,7 @@ events.on('formErrors:address', (errors: Partial<IOrderForm>) => {
 
 // открываем модалку контактных данных
 events.on('contacts:open', () => {
-	formModel.total = cartModel.getTotalAllGoods();
+	formModel.total = cartModel.getTotalPrice();
 	modal.content = contacts.render();
 	modal.render();
 });
@@ -160,9 +160,9 @@ events.on('success:open', () => {
 		.then((data) => {
 			console.log(data);
 			const success = new Success(successTemplate, events);
-			modal.content = success.render(cartModel.getTotalAllGoods());
-			cartModel.clearCartItems();
-			cart.renderHeaderCartCounter(cartModel.getCounter());
+			modal.content = success.render(cartModel.getTotalPrice());
+			cartModel.clear();
+			cart.renderHeaderCartCounter(cartModel.getItemsCount());
 			modal.render();
 		})
 		.catch((error) => console.log(error));
