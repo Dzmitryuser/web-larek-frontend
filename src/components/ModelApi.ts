@@ -1,35 +1,48 @@
-import { ApiListResponse, Api } from './base/api';
+import { Api } from './base/api';
 import { IOrderedLot, IOrderResult, IGoodsItem } from '../types';
 
 export interface IApiModel {
 	cdn: string;
 	items: IGoodsItem[];
-	postOrderedItem: (orderedLot: IOrderedLot) => Promise<IOrderResult>;
-	getListItemsCard: () => Promise<IGoodsItem[]>;
-
+	postOrder(order: IOrderedLot): Promise<IOrderResult>;
+	fetchItems(): Promise<IGoodsItem[]>;
 }
 
-export class ApiModel extends Api {
-	cdn: string;
-	items: IGoodsItem[];
+export class ApiModel extends Api implements IApiModel {
+	readonly cdn: string;
+	items: IGoodsItem[] = [];
 
 	constructor(cdn: string, baseUrl: string, options?: RequestInit) {
 		super(baseUrl, options);
 		this.cdn = cdn;
 	}
 
-	// получаем информацию о заказе
-	postOrderedItem(orderedLot: IOrderedLot): Promise<IOrderResult> {
-		return this.post(`/order`, orderedLot).then((data: IOrderResult) => data);
+	async postOrder(order: IOrderedLot): Promise<IOrderResult> {
+		const response = (await this.post('/order', order)) as IOrderResult;
+
+		if (typeof response.id !== 'string' || typeof response.total !== 'number') {
+			throw new Error('Invalid order response format');
+		}
+
+		return {
+			id: response.id,
+			total: response.total,
+		};
 	}
 
-	// получаем данные карточек от сервера
-	getListItemsCard(): Promise<IGoodsItem[]> {
-		return this.get('/product').then((data: ApiListResponse<IGoodsItem>) =>
-			data.items.map((item) => ({
-				...item,
-				image: this.cdn + item.image,
-			}))
-		);
+	async fetchItems(): Promise<IGoodsItem[]> {
+		type ItemsResponse = { items: IGoodsItem[] };
+		const response = (await this.get('/product')) as ItemsResponse;
+
+		if (!Array.isArray(response?.items)) {
+			throw new Error('Invalid items response format');
+		}
+
+		this.items = response.items.map((item) => ({
+			...item,
+			image: item.image ? this.cdn + item.image : '',
+		}));
+
+		return this.items;
 	}
 }

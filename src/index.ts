@@ -156,7 +156,7 @@ events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
 // открываем модалку успешного оформления заказа
 events.on('success:open', () => {
 	apiModel
-		.postOrderedItem(formModel.getOrderedItem())
+		.postOrder(formModel.getOrderedItem())
 		.then((data) => {
 			console.log(data);
 			const success = new Success(successTemplate, events);
@@ -182,7 +182,7 @@ events.on('modal:close', () => {
 
 // получаем данные карточек от сервера
 apiModel
-	.getListItemsCard()
+	.fetchItems()
 	.then(function (data: IGoodsItem[]) {
 		dataModel.itemCards = data;
 	})
