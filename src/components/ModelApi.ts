@@ -21,7 +21,7 @@ export class ApiModel extends Api implements IApiModel {
 		const response = (await this.post('/order', order)) as IOrderResult;
 
 		if (typeof response.id !== 'string' || typeof response.total !== 'number') {
-			throw new Error('Invalid order response format');
+			throw new Error('Неверный формат ответа');
 		}
 
 		return {
@@ -35,7 +35,7 @@ export class ApiModel extends Api implements IApiModel {
 		const response = (await this.get('/product')) as ItemsResponse;
 
 		if (!Array.isArray(response?.items)) {
-			throw new Error('Invalid items response format');
+			throw new Error('Неверный формат ответа');
 		}
 
 		this.items = response.items.map((item) => ({

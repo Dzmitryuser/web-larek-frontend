@@ -36,7 +36,8 @@ export class Card implements ICard {
 			this._cardElement.addEventListener('click', actions.onClick);
 		}
 	}
-
+	
+    // Форматируем цену для отображения
 	protected setPrice(itemValue: number | null): string {
 		if (itemValue === null) {
 			return 'Бесценно';
@@ -44,6 +45,7 @@ export class Card implements ICard {
 		return `${itemValue} синапсов`;
 	}
 
+    // Устанавливаем текстовое содержимое элемента
 	protected setText(element: HTMLElement, value: unknown): string {
 		if (element) {
 			return (element.textContent = `${value}`);

@@ -64,7 +64,7 @@ export class FormModel implements IFormModel {
 		const adressRegexp = /^[а-яА-ЯёЁa-zA-Z0-9\s\/.,-]{7,}$/;
 
 		if (!this.address) {
-			errors.address = 'Необходимо указать адрес';
+			errors.address = 'Укажите адрес';
 		} else if (!adressRegexp.test(this.address)) {
 			errors.address = 'Укажите настоящий адрес';
 		} else if (!this.payment) {
@@ -79,11 +79,11 @@ export class FormModel implements IFormModel {
 	// валидируем email и телефон
 	validateContacts() {
 		const errors: typeof this.formErrors = {};
-		const emailRegexp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-		const phoneRegexp = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10}$/;
+		const emailRegexp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		const phoneRegexp = /^(?:\+7|8)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
 
 		if (!this.email) {
-			errors.email = 'Необходимо указать email';
+			errors.email = 'укажите адрес электронной почты';
 		} else if (!emailRegexp.test(this.email)) {
 			errors.email = 'Некорректный адрес электронной почты';
 		}
@@ -102,7 +102,7 @@ export class FormModel implements IFormModel {
 		this.events.emit('formErrors:change', this.formErrors);
 		return Object.keys(errors).length === 0;
 	}
-
+    //Возвращаем полные данные заказа (товары + информация пользователя)
 	getOrderedItem() {
 		return {
 			payment: this.payment,

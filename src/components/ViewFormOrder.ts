@@ -42,7 +42,7 @@ export class Order implements IOrder {
 		});
 	}
 
-	// устанавливаем обводку для выбранного метода оплаты
+	// устанавливаем аутлайн для выбранного метода оплаты
 	set paymentSelection(paymentMethod: string) {
 		this.buttonAll.forEach((item) => {
 			item.classList.toggle('button_alt-active', item.name === paymentMethod);

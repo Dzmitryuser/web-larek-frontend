@@ -25,7 +25,7 @@ export class CardPreview extends Card implements ICard {
 		});
 	}
 
-	notSale(data: IGoodsItem) {
+	notFOrSale(data: IGoodsItem) {
 		if (data.price) {
 			return 'Купить';
 		} else {
@@ -42,7 +42,7 @@ export class CardPreview extends Card implements ICard {
 		this.cardCategory = itemData.category;
 		this._cardPrice.textContent = this.setPrice(itemData.price);
 		this.text.textContent = itemData.description;
-		this.button.textContent = this.notSale(itemData);
+		this.button.textContent = this.notFOrSale(itemData);
 		return this._cardElement;
 	}
 }

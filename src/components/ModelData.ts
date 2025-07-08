@@ -23,7 +23,7 @@ export class DataModel implements IDataModel {
 		this._itemCard = data;
 		this.events.emit('productCards:receive');
 	}
-
+    // Сохраняем данные просматриваемой карточки товара
 	setPreview(goodsItem: IGoodsItem) {
 		this.selectedCard = goodsItem;
 		this.events.emit('modalCard:open', goodsItem);
