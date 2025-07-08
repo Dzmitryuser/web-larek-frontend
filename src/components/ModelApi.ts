@@ -4,8 +4,8 @@ import { IOrderedLot, IOrderResult, IGoodsItem } from '../types';
 export interface IApiModel {
 	cdn: string;
 	items: IGoodsItem[];
-	postOrderLot: (orderedLot: IOrderedLot) => Promise<IOrderResult>;
-	getListProductCard: () => Promise<IGoodsItem[]>;
+	postOrderedItem: (orderedLot: IOrderedLot) => Promise<IOrderResult>;
+	getListItemsCard: () => Promise<IGoodsItem[]>;
 
 }
 
@@ -18,13 +18,13 @@ export class ApiModel extends Api {
 		this.cdn = cdn;
 	}
 
-	// получаем информацию по заказу
-	postOrderLot(orderedLot: IOrderedLot): Promise<IOrderResult> {
+	// получаем информацию о заказе
+	postOrderedItem(orderedLot: IOrderedLot): Promise<IOrderResult> {
 		return this.post(`/order`, orderedLot).then((data: IOrderResult) => data);
 	}
 
 	// получаем данные карточек от сервера
-	getListProductCard(): Promise<IGoodsItem[]> {
+	getListItemsCard(): Promise<IGoodsItem[]> {
 		return this.get('/product').then((data: ApiListResponse<IGoodsItem>) =>
 			data.items.map((item) => ({
 				...item,

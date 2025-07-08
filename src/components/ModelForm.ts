@@ -13,7 +13,7 @@ export interface IFormModel {
 	setOrderData(field: string, value: string): void;
 	validateOrder(): boolean;
 	validateContacts(): boolean;
-	getOrderLot(): object;
+	getOrderedItem(): object;
 }
 
 export class FormModel implements IFormModel {
@@ -34,18 +34,18 @@ export class FormModel implements IFormModel {
 		this.items = [];
 	}
 
-	// устанавливаем значение адрес
+	// присваиваем значение полю address
 	setOrderAddress(adressField: string, value: string) {
 		if (adressField === 'address') {
 			this.address = value;
 		}
 
 		if (this.validateOrder()) {
-			this.events.emit('order:ready', this.getOrderLot());
+			this.events.emit('order:ready', this.getOrderedItem());
 		}
 	}
 
-	// устанавливаем значение email и телефон
+	// присваиваем значения email и phone
 	setOrderData(contactField: string, value: string) {
 		if (contactField === 'email') {
 			this.email = value;
@@ -54,14 +54,14 @@ export class FormModel implements IFormModel {
 		}
 
 		if (this.validateContacts()) {
-			this.events.emit('order:ready', this.getOrderLot());
+			this.events.emit('order:ready', this.getOrderedItem());
 		}
 	}
 
 	// валидируем адрес
 	validateOrder() {
-		const adressRegexp = /^[а-яА-ЯёЁa-zA-Z0-9\s\/.,-]{7,}$/;
 		const errors: typeof this.formErrors = {};
+		const adressRegexp = /^[а-яА-ЯёЁa-zA-Z0-9\s\/.,-]{7,}$/;
 
 		if (!this.address) {
 			errors.address = 'Необходимо указать адрес';
@@ -78,9 +78,9 @@ export class FormModel implements IFormModel {
 
 	// валидируем email и телефон
 	validateContacts() {
+		const errors: typeof this.formErrors = {};
 		const emailRegexp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 		const phoneRegexp = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10}$/;
-		const errors: typeof this.formErrors = {};
 
 		if (!this.email) {
 			errors.email = 'Необходимо указать email';
@@ -103,7 +103,7 @@ export class FormModel implements IFormModel {
 		return Object.keys(errors).length === 0;
 	}
 
-	getOrderLot() {
+	getOrderedItem() {
 		return {
 			payment: this.payment,
 			phone: this.phone,

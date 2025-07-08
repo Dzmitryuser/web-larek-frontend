@@ -17,6 +17,7 @@ import { Cart } from './components/ViewCart';
 import { Contacts } from './components/ViewFormContacts';
 import { Success } from './components/ViewSuccess';
 
+// объявляем переменные темплейт-элементов
 const cardCatalogTemplate = document.querySelector(
 	'#card-catalog'
 ) as HTMLTemplateElement;
@@ -35,6 +36,7 @@ const successTemplate = document.querySelector(
 	'#success'
 ) as HTMLTemplateElement;
 
+// создаем необходимые для работы экземпляры классов
 const apiModel = new ApiModel(CDN_URL, API_URL);
 const events = new EventEmitter();
 const dataModel = new DataModel(events);
@@ -45,9 +47,9 @@ const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const order = new Order(orderTemplate, events);
 const contacts = new Contacts(contactsTemplate, events);
 
-// выводим карточки товара
+// выводим карточки товаров
 events.on('productCards:receive', () => {
-	dataModel.productCards.forEach((item) => {
+	dataModel.itemCards.forEach((item) => {
 		const card = new Card(cardCatalogTemplate, events, {
 			onClick: () => events.emit('card:select', item),
 		});
@@ -60,7 +62,7 @@ events.on('card:select', (item: IGoodsItem) => {
 	dataModel.setPreview(item);
 });
 
-// открытие модалки карточки товара
+// открываем модалку карточки товара
 events.on('modalCard:open', (item: IGoodsItem) => {
 	const cardPreview = new CardPreview(cardPreviewTemplate, events);
 	modal.content = cardPreview.render(item);
@@ -154,7 +156,7 @@ events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
 // открываем модалку успешного оформления заказа
 events.on('success:open', () => {
 	apiModel
-		.postOrderLot(formModel.getOrderLot())
+		.postOrderedItem(formModel.getOrderedItem())
 		.then((data) => {
 			console.log(data);
 			const success = new Success(successTemplate, events);
@@ -180,8 +182,8 @@ events.on('modal:close', () => {
 
 // получаем данные карточек от сервера
 apiModel
-	.getListProductCard()
+	.getListItemsCard()
 	.then(function (data: IGoodsItem[]) {
-		dataModel.productCards = data;
+		dataModel.itemCards = data;
 	})
 	.catch((error) => console.log(error));

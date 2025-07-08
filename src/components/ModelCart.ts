@@ -24,7 +24,7 @@ export class CartModel implements ICartModel {
 		return this._cartGoods;
 	}
 
-	// стоимость товаров в корзине
+	// общая стоимость товаров в корзине
 	getTotalAllGoods() {
 		let sumAll = 0;
 		this.cartGoods.forEach((item) => {
@@ -33,7 +33,7 @@ export class CartModel implements ICartModel {
 		return sumAll;
 	}
 
-	// сумма товаров в корзине
+	// общее количество товаров в корзине
 	getCounter() {
 		return this.cartGoods.length;
 	}
@@ -51,8 +51,8 @@ export class CartModel implements ICartModel {
 		}
 	}
 
-	// Очищаем корзину
+	// сбрасываем корзину
 	clearCartItems() {
-		this.cartGoods = [];
+		this.cartGoods.length = 0;
 	}
 }
