@@ -1,5 +1,6 @@
 import { IActions, IGoodsItem } from '../types';
 import { IEvents } from './base/events';
+import { getPrice } from '../utils/utils';
 
 export interface ICard {
 	render(itemData: IGoodsItem): HTMLElement;
@@ -36,14 +37,6 @@ export class Card implements ICard {
 			this._cardElement.addEventListener('click', actions.onClick);
 		}
 	}
-	
-    // Форматируем цену для отображения
-	protected setPrice(itemValue: number | null): string {
-		if (itemValue === null) {
-			return 'Бесценно';
-		}
-		return `${itemValue} синапсов`;
-	}
 
     // Устанавливаем текстовое содержимое элемента
 	protected setText(element: HTMLElement, value: unknown): string {
@@ -63,7 +56,7 @@ export class Card implements ICard {
 		this._cardTitle.textContent = itemData.title;
 		this._cardImage.src = itemData.image;
 		this._cardImage.alt = this._cardTitle.textContent;
-		this._cardPrice.textContent = this.setPrice(itemData.price);
+		this._cardPrice.textContent = getPrice(itemData.price);
 		return this._cardElement;
 	}
 }

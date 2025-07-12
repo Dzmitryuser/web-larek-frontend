@@ -17,6 +17,7 @@ import { Cart } from './components/ViewCart';
 import { Contacts } from './components/ViewFormContacts';
 import { Success } from './components/ViewSuccess';
 
+
 // объявляем переменные темплейт-элементов
 const cardCatalogTemplate = document.querySelector(
 	'#card-catalog'
@@ -181,6 +182,7 @@ events.on('modal:close', () => {
 });
 
 // получаем данные карточек от сервера
+
 apiModel
 	.fetchItems()
 	.then(function (data: IGoodsItem[]) {

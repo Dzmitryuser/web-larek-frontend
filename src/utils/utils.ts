@@ -133,3 +133,10 @@ export function createElement<
     }
     return element;
 }
+
+export const getPrice = (value: number | null): string => {
+		if (value === null) {
+			return 'Бесценно';
+		}
+		return `${value} синапсов`;
+	}

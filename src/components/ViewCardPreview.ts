@@ -1,6 +1,7 @@
 import { Card } from './ViewCard';
 import { IActions, IGoodsItem } from '../types';
 import { IEvents } from './base/events';
+import { getPrice } from '../utils/utils';
 
 export interface ICard {
 	button: HTMLElement;
@@ -40,7 +41,7 @@ export class CardPreview extends Card implements ICard {
 		this._cardImage.src = itemData.image;
 		this._cardImage.alt = this._cardTitle.textContent;
 		this.cardCategory = itemData.category;
-		this._cardPrice.textContent = this.setPrice(itemData.price);
+		this._cardPrice.textContent = getPrice(itemData.price);
 		this.text.textContent = itemData.description;
 		this.button.textContent = this.notFOrSale(itemData);
 		return this._cardElement;

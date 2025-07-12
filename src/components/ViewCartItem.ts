@@ -1,5 +1,6 @@
 import { IActions, IGoodsItem } from '../types';
 import { IEvents } from './base/events';
+import { getPrice } from '../utils/utils';
 
 export interface ICartItem {
 	cartItem: HTMLElement;
@@ -35,17 +36,10 @@ export class CartItem implements ICartItem {
 		}
 	}
 
-	protected setPrice(value: number | null) {
-		if (value === null) {
-			return 'Бесценно';
-		}
-		return `${value} синапсов`;
-	}
-
 	render(data: IGoodsItem, item: number) {
 		this.index.textContent = String(item);
 		this.title.textContent = data.title;
-		this.price.textContent = this.setPrice(data.price);
+		this.price.textContent = getPrice(data.price);
 		return this.cartItem;
 	}
 }
