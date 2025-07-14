@@ -16,6 +16,7 @@ import { CartModel } from './components/ModelCart';
 import { Cart } from './components/ViewCart';
 import { Contacts } from './components/ViewFormContacts';
 import { Success } from './components/ViewSuccess';
+import { MainPage } from './components/ViewMainPage';
 
 
 // объявляем переменные темплейт-элементов
@@ -47,15 +48,19 @@ const formModel = new FormModel(events);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const order = new Order(orderTemplate, events);
 const contacts = new Contacts(contactsTemplate, events);
+const mainPage = new MainPage();
 
-// выводим карточки товаров
+
+// Обработчик события получения карточек товаров
 events.on('productCards:receive', () => {
-	dataModel.itemCards.forEach((item) => {
-		const card = new Card(cardCatalogTemplate, events, {
-			onClick: () => events.emit('card:select', item),
-		});
-		ensureElement<HTMLElement>('.gallery').append(card.render(item));
-	});
+  const cards = dataModel.itemCards.map(item => {
+    const card = new Card(cardCatalogTemplate, events, {
+      onClick: () => events.emit('card:select', item)
+    });
+    return card.render(item);
+  });
+
+  mainPage.renderCards(cards);
 });
 
 // Получаем данные кликнутой карточки
