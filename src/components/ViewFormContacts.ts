@@ -15,12 +15,11 @@ export class Contacts implements IContacts {
 	formErrors: HTMLElement;
 	inputAll: HTMLInputElement[];
 
-
 	constructor(template: HTMLTemplateElement, protected events: IEvents) {
 		this.formContacts = template.content
 			.querySelector('.form')
 			.cloneNode(true) as HTMLFormElement;
-					this.buttonSubmit = this.formContacts.querySelector('.button');
+		this.buttonSubmit = this.formContacts.querySelector('.button');
 		this.inputAll = Array.from(
 			this.formContacts.querySelectorAll('.form__input')
 		);

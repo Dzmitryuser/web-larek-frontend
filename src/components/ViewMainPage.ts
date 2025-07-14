@@ -13,7 +13,7 @@ export class MainPage {
 		this.headerCartButton = document.querySelector('.header__basket');
 		this.headerCartCounter = document.querySelector('.header__basket-counter');
 		this.headerCartButton.addEventListener('click', () => {
-		this.events.emit('basket:open');
+			this.events.emit('basket:open');
 		});
 	}
 

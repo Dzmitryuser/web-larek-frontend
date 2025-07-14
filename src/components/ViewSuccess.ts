@@ -19,7 +19,9 @@ export class Success {
 		this.description = this.successWindow.querySelector(
 			'.order-success__description'
 		);
-		this.closeButton = this.successWindow.querySelector('.order-success__close');
+		this.closeButton = this.successWindow.querySelector(
+			'.order-success__close'
+		);
 
 		this.closeButton.addEventListener('click', () => {
 			events.emit('success:close');

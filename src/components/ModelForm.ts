@@ -5,23 +5,19 @@ export interface IFormModel {
 	payment: string;
 	phone: string;
 	address: string;
-	total: number;
-	items: string[];
 	email: string;
 
 	setOrderAddress(field: string, value: string): void;
 	setOrderData(field: string, value: string): void;
 	validateOrder(): boolean;
 	validateContacts(): boolean;
-	getOrderedItem(): object;
+	getOrderedItem(items: string[], total: number): object;
 }
 
 export class FormModel implements IFormModel {
 	payment: string;
 	phone: string;
 	address: string;
-	total: number;
-	items: string[];
 	email: string;
 	formErrors: FormErrors = {};
 
@@ -29,9 +25,7 @@ export class FormModel implements IFormModel {
 		this.payment = '';
 		this.phone = '';
 		this.address = '';
-		this.total = 0;
 		this.email = '';
-		this.items = [];
 	}
 
 	// присваиваем значение полю address
@@ -41,7 +35,7 @@ export class FormModel implements IFormModel {
 		}
 
 		if (this.validateOrder()) {
-			this.events.emit('order:ready', this.getOrderedItem());
+			this.events.emit('order:ready', this.getOrderedItem([], 0));
 		}
 	}
 
@@ -54,7 +48,7 @@ export class FormModel implements IFormModel {
 		}
 
 		if (this.validateContacts()) {
-			this.events.emit('order:ready', this.getOrderedItem());
+			this.events.emit('order:ready', this.getOrderedItem([], 0));
 		}
 	}
 
@@ -80,7 +74,8 @@ export class FormModel implements IFormModel {
 	validateContacts() {
 		const errors: typeof this.formErrors = {};
 		const emailRegexp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-		const phoneRegexp = /^(?:\+7|8)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
+		const phoneRegexp =
+			/^(?:\+7|8)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
 
 		if (!this.email) {
 			errors.email = 'укажите адрес электронной почты';
@@ -102,15 +97,16 @@ export class FormModel implements IFormModel {
 		this.events.emit('formErrors:change', this.formErrors);
 		return Object.keys(errors).length === 0;
 	}
-    //Возвращаем полные данные заказа (товары + информация пользователя)
-	getOrderedItem() {
+
+	// Возвращаем полные данные заказа (товары + информация пользователя)
+	getOrderedItem(items: string[], total: number) {
 		return {
 			payment: this.payment,
 			phone: this.phone,
 			address: this.address,
-			total: this.total,
+			total: total,
 			email: this.email,
-			items: this.items,
+			items: items,
 		};
 	}
 }

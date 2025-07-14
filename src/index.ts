@@ -18,7 +18,6 @@ import { Contacts } from './components/ViewFormContacts';
 import { Success } from './components/ViewSuccess';
 import { MainPage } from './components/ViewMainPage';
 
-
 // объявляем переменные темплейт-элементов
 const cardCatalogTemplate = document.querySelector(
 	'#card-catalog'
@@ -50,17 +49,16 @@ const order = new Order(orderTemplate, events);
 const contacts = new Contacts(contactsTemplate, events);
 const mainPage = new MainPage('.page', events);
 
-
 // Обработчик события получения карточек товаров
 events.on('productCards:receive', () => {
-  const cards = dataModel.itemCards.map(item => {
-    const card = new Card(cardCatalogTemplate, events, {
-      onClick: () => events.emit('card:select', item)
-    });
-    return card.render(item);
-  });
+	const cards = dataModel.itemCards.map((item) => {
+		const card = new Card(cardCatalogTemplate, events, {
+			onClick: () => events.emit('card:select', item),
+		});
+		return card.render(item);
+	});
 
-  mainPage.renderCards(cards);
+	mainPage.renderCards(cards);
 });
 
 // Получаем данные кликнутой карточки
@@ -112,12 +110,10 @@ events.on('basket:open', () => {
 	modal.render();
 });
 
-
 // открываем модалку заполнения данных
 events.on('order:open', () => {
 	modal.content = order.render();
 	modal.render();
-	formModel.items = cartModel.items.map((item) => item.id);
 });
 // передаём способ оплаты
 events.on('order:paymentSelection', (button: HTMLButtonElement) => {
@@ -140,7 +136,6 @@ events.on('formErrors:address', (errors: Partial<IOrderForm>) => {
 
 // открываем модалку контактных данных
 events.on('contacts:open', () => {
-	formModel.total = cartModel.getTotalPrice();
 	modal.content = contacts.render();
 	modal.render();
 });
@@ -161,12 +156,14 @@ events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
 
 // открываем модалку успешного оформления заказа
 events.on('success:open', () => {
+	const itemIds = cartModel.items.map((item) => item.id);
+	const total = cartModel.getTotalPrice();
+
 	apiModel
-		.postOrder(formModel.getOrderedItem())
-		.then((data) => {
-			console.log(data);
+		.postOrder(formModel.getOrderedItem(itemIds, total))
+		.then(() => {
 			const success = new Success(successTemplate, events);
-			modal.content = success.render(cartModel.getTotalPrice());
+			modal.content = success.render(total);
 			cartModel.clear();
 			mainPage.renderHeaderCartCounter(cartModel.getItemsCount());
 			modal.render();
