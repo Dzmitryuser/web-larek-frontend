@@ -48,7 +48,7 @@ const formModel = new FormModel(events);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const order = new Order(orderTemplate, events);
 const contacts = new Contacts(contactsTemplate, events);
-const mainPage = new MainPage();
+const mainPage = new MainPage('.page', events);
 
 
 // Обработчик события получения карточек товаров
@@ -78,14 +78,14 @@ events.on('modalCard:open', (item: IGoodsItem) => {
 // добавляем товар в корзину
 events.on('card:addBasket', () => {
 	cartModel.addItem(dataModel.selectedCard);
-	cart.renderHeaderCartCounter(cartModel.getItemsCount());
+	mainPage.renderHeaderCartCounter(cartModel.getItemsCount());
 	modal.close();
 });
 
 // удаляем товар из корзины
 events.on('basket:basketItemRemove', (item: IGoodsItem) => {
 	cartModel.removeItem(item);
-	cart.renderHeaderCartCounter(cartModel.getItemsCount());
+	mainPage.renderHeaderCartCounter(cartModel.getItemsCount());
 	cart.renderTotalAllGoods(cartModel.getTotalPrice());
 	let i = 0;
 	cart.items = cartModel.items.map((item) => {
@@ -168,7 +168,7 @@ events.on('success:open', () => {
 			const success = new Success(successTemplate, events);
 			modal.content = success.render(cartModel.getTotalPrice());
 			cartModel.clear();
-			cart.renderHeaderCartCounter(cartModel.getItemsCount());
+			mainPage.renderHeaderCartCounter(cartModel.getItemsCount());
 			modal.render();
 		})
 		.catch((error) => console.log(error));

@@ -7,9 +7,6 @@ export interface ICart {
 	button: HTMLButtonElement;
 	cartPrice: HTMLElement;
 	title: HTMLElement;
-	headerCartButton: HTMLButtonElement;
-	headerCartCounter: HTMLElement;
-	renderHeaderCartCounter(value: number): void;
 	renderTotalAllGoods(sumAll: number): void;
 	render(): HTMLElement;
 }
@@ -20,8 +17,7 @@ export class Cart implements ICart {
 	button: HTMLButtonElement;
 	cartPrice: HTMLElement;
 	title: HTMLElement;
-	headerCartButton: HTMLButtonElement;
-	headerCartCounter: HTMLElement;
+
 
 	constructor(template: HTMLTemplateElement, protected events: IEvents) {
 		this.cart = template.content
@@ -29,17 +25,14 @@ export class Cart implements ICart {
 			.cloneNode(true) as HTMLElement;
 		this.cartList = this.cart.querySelector('.basket__list');
 		this.button = this.cart.querySelector('.basket__button');
-		this.headerCartButton = document.querySelector('.header__basket');
-		this.headerCartCounter = document.querySelector('.header__basket-counter');
+
 		this.cartPrice = this.cart.querySelector('.basket__price');
 		this.title = this.cart.querySelector('.modal__title');
 
 		this.button.addEventListener('click', () => {
 			this.events.emit('order:open');
 		});
-		this.headerCartButton.addEventListener('click', () => {
-			this.events.emit('basket:open');
-		});
+
 
 		this.items = [];
 	}
@@ -62,9 +55,7 @@ export class Cart implements ICart {
 		this.cartPrice.textContent = `${total} синапсов`;
 	}
 
-	renderHeaderCartCounter(value: number) {
-		this.headerCartCounter.textContent = `${value}`;
-	}
+
 
 	render() {
 		this.title.textContent = 'Корзина';
